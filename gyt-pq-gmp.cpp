@@ -33,9 +33,10 @@ void read_input (polynomial &p, mpz_class &B) {
 
   cerr << "+++ Input B: ";
   cin >> B;
-  cout << "*** B = " << B << endl;
+  cout << endl << "*** B = " << B << endl;
   cerr << "+++ Number of variables: ";
   cin >> p.k;
+  cout << endl << "*** k = " << p.k << endl;
   cerr << "+++ Monomials in the form 'coefficient exponent ... exponent', ";
   cerr << "one per line" << endl;
   cerr << "+++ Terminate with CTRL-D" << endl;
@@ -155,7 +156,6 @@ bool test_bound (const val_tuple &val, const val_tuple &bound, int k) {
 int main(int argc, char **argv) {
   mpz_class B;
   polynomial p;
-  // stack<val_tuple> stck;
   priority_queue<val_res, vector<val_res>, cmp_vr> pq;
   set<val_tuple> memo;
   unsigned int maxstack = 1;

@@ -22,9 +22,10 @@ void read_input (polynomial &p, unsigned long long &B) {
 
   cerr << "+++ Input B: ";
   cin >> B;
-  cout << "*** B = " << B << endl;
+  cout << endl << "*** B = " << B << endl;
   cerr << "+++ Number of variables: ";
   cin >> p.k;
+  cout << endl << "*** k = " << p.k << endl;
   cerr << "+++ Monomials in the form 'coefficient exponent ... exponent', ";
   cerr << "one per line" << endl;
   cerr << "+++ Terminate with CTRL-D" << endl;

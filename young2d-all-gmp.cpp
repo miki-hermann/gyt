@@ -22,7 +22,7 @@ void read_input (polynomial &p, mpz_class &B) {
 
   cerr << "+++ Input B: ";
   cin >> B;
-  cout << "*** B = " << B << endl;
+  cout << endl << "*** B = " << B << endl;
   int k;
   cin >> k;
   if (k != 2) {

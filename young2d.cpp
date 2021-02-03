@@ -18,7 +18,7 @@ void read_input (polynomial &p, unsigned long long &B) {
 
   cerr << "+++ Input B: ";
   cin >> B;
-  cout << "*** B = " << B << endl;
+  cout << endl << "*** B = " << B << endl;
   cerr << "+++ Number of variables: ";
   int k;
   cin >> k;
