@@ -215,9 +215,25 @@ int main(int argc, char **argv) {
       cout << "    x_" << i+1 << " = " << val[i] << endl;
   } else
     cout << endl << "+++ NO solution +++" << endl;
-  cout << "*** memo size       = " << memo.size() << endl;
+  unsigned long long msize = memo.size();
+  cout << "*** memo size       = " << msize;
+  string km = "";
+  if (msize > 1024) {
+    msize /= 1024;
+    km = "K";
+  }
+  if (msize > 1024) {
+    msize /= 1024;
+    km = "M";
+  }
+  if (msize > 1024) {
+    msize /= 1024;
+    km = "G";
+  }
+  if (km.length() > 0)
+    cout << " (" << msize << km << ")";
+  cout << endl;
   cout << "    max queue size  = " << maxstack << endl;
-  cout << "    queue residue   = " << pq.size() << endl;
   cout << "    # of splits     = " << split << endl;
   cout << "    # of backtracks = " << nback << endl;
   cout << "    doubles reached = " << dbl << endl;

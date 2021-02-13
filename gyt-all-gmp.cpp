@@ -205,7 +205,24 @@ int main(int argc, char **argv) {
 
   cout << endl;
   cout << "+++ number of solutions = " << nres << endl;
-  cout << "*** memo size       = " << memo.size() << endl;
+  unsigned long long msize = memo.size();
+  cout << "*** memo size       = " << msize;
+  string km = "";
+  if (msize > 1024) {
+    msize /= 1024;
+    km = "K";
+  }
+  if (msize > 1024) {
+    msize /= 1024;
+    km = "M";
+  }
+  if (msize > 1024) {
+    msize /= 1024;
+    km = "G";
+  }
+  if (km.length() > 0)
+    cout << " (" << msize << km << ")";
+  cout << endl;
   cout << "    max stack size  = " << maxstack << endl;
   cout << "    # of backtracks = " << nback << endl;
   cout << "    doubles reached = " << dbl << endl;
