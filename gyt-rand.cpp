@@ -1,156 +1,27 @@
 #include <iostream>
 #include <vector>
-#include <climits>
 #include <stack>
 #include <set>
 #include <algorithm>
 #include <random>
+#include "gyt-common.hpp"
 
 using namespace std;
 
-typedef vector<unsigned long long> val_tuple;
-typedef struct {
-  unsigned int k;		// number of variables
-  val_tuple coeffs;		// coefficients
-  vector<val_tuple> monomials;	// exponents
-} polynomial;
-
-void read_input (polynomial &p, unsigned long long &B) {
-  cout << "Randomized Multidimensional Generalized Young Tableaux"
-       << endl;
-  cout << "======================================================"
-       << endl;
-  cout << endl;
-
-  cerr << "+++ Input B: ";
-  cin >> B;
-  cout << endl << "*** B = " << B << endl;
-  cerr << "+++ Number of variables: ";
-  cin >> p.k;
-  cout << endl << "*** k = " << p.k << endl;
-  cerr << "+++ Monomials in the form 'coefficient exponent ... exponent', ";
-  cerr << "one per line" << endl;
-  cerr << "+++ Terminate with CTRL-D" << endl;
-  
-  unsigned long long temp;
-  while (cin >> temp) {
-    p.coeffs.push_back(temp);
-    val_tuple exponents;
-    unsigned long long exp;
-    for (unsigned int i = 0; i < p.k; ++i) {
-      cin >> exp;
-      exponents.push_back(exp);
-    }
-    p.monomials.push_back(exponents);
-    cerr << "*** monomial = " << temp;
-    for (unsigned int i = 0; i < p.k; ++i)
-      if (exponents[i] > 0)
-	cerr << " (x_" << i+1 << ")^" << exponents[i];
-    cerr << endl;
-  }
-
-  cout << "*** equation: ";
-  bool plus = false;
-  for (unsigned int i = 0; i < p.coeffs.size(); ++i) {
-    if (plus)
-      cout << " + ";
-    else
-      plus = true;
-    cout << p.coeffs[i];
-    for (unsigned int j = 0; j < p.k; ++j)
-      if (p.monomials[i][j] > 0)
-	cout << " (x_" << j+1 << ")^" << p.monomials[i][j];
-  }
-  cout <<  " = " << B << endl;
-}
-
-unsigned long long power(unsigned long long x, unsigned long long n) {
-  if (n == 0)
-    return 1;
-  unsigned long long y = 1;
-  while (n > 1)
-    if (n % 2 == 0) {
-      x *= x;
-      n >>= 1;
-    } else {
-      y *= x;
-      x *= x;
-      n = (n-1)/2;
-    }
-  return x * y;
-}
-
-long double power(long double x, unsigned long long n) {
-  if (n == 0)
-    return 1.0;
-  long double y = 1.0;
-  while (n > 1)
-    if (n % 2 == 0) {
-      x *= x;
-      n >>= 1;
-    } else {
-      y *= x;
-      x *= x;
-      n = (n-1)/2;
-    }
-  return x * y;
-}
-
-unsigned long long eval(const polynomial &p, const val_tuple &val) {
-  unsigned long long add = 0;
-  for (unsigned int i = 0; i < p.coeffs.size(); ++i) {
-    unsigned long long mult = p.coeffs[i];
-    for (unsigned j = 0; j < p.k; ++j)
-      mult *= power(val[j], p.monomials[i][j]);
-    add += mult;
-  }
-  return add;
-}
-
-long double nthroot (const long double A, const unsigned long long n) {
-  long double oldx, x = A/n;
-  do {
-    oldx = x;
-    x = ((n-1)*oldx + A/power(oldx, n-1))/n;
-  } while (abs(oldx-x) > 0.01);
-  return x;
-}
-
-val_tuple get_bounds (const polynomial &p,
-		      const unsigned long long &B) {
-  val_tuple bound;
-  val_tuple minpos(p.k);
-  val_tuple minexp(p.k, ULLONG_MAX);
-  for (unsigned int j = 0; j < p.monomials.size(); ++j)
-    for (unsigned int i = 0; i < p.k; ++i)
-      if (p.monomials[j][i] > 0 && p.monomials[j][i] < minexp[i]) {
-	minexp[i] = p.monomials[j][i];
-	minpos[i] = j;
-      }
-  for (unsigned int i = 0; i < p.k; ++i)
-    bound.push_back(nthroot(B/p.coeffs[minpos[i]], minexp[i]) + 1);
-  
-  return bound;
-}
-
-bool test_bound (const val_tuple &val, const val_tuple &bound, int k) {
-  for (unsigned int i = 0; i < k; ++i)
-    if (val[i] > bound[i])
-      return false;
-  return true;
-}
+const string header    = "Randomized Multidimensional Generalized Young Tableaux";
+const string underline = "======================================================";
 
 //////////////////////////////////////////////////////////////////////////////
 
 int main(int argc, char **argv) {
-  unsigned long long B;
+  bigint B;
   polynomial p;
   stack<val_tuple> stck;
   set<val_tuple> memo;
-  unsigned int maxstack = 1;
+  bigint maxstack = 1;
   bool flip = true;
-  unsigned int nback = 0;
-  unsigned int split = 0;
+  bigint nback = 0;
+  bigint split = 0;
 
   read_input(p, B);
   val_tuple bound = get_bounds(p, B);
@@ -164,7 +35,7 @@ int main(int argc, char **argv) {
   stck.push(val);
   memo.insert(val);
   bool solution = false;
-  unsigned int dbl = 0;
+  bigint dbl = 0;
   while (!solution && !stck.empty()) {
     val = stck.top();
     stck.pop();
@@ -173,16 +44,16 @@ int main(int argc, char **argv) {
 
     while (test_bound(val, bound, p.k) &&
 	   val[p.k-1] >= 0) {
-      unsigned long long result = eval(p, val);
+      bigint result = eval(p, val);
       if (result == B) {
 	solution = true;
 	break;
       } else if (result > B)
 	val[p.k-1]--;
       else if (result < B) {
-	unsigned int put = 0;
+	bigint put = 0;
 	vector<val_tuple> newstck;
-	for (unsigned int i = 0; i < p.k-1; ++i) {
+	for (bigint i = 0; i < p.k-1; ++i) {
 	  val_tuple valx = val;
 	  valx[i]++;
 	  if (valx[i] <= bound[i] && memo.find(valx) == memo.cend()) {
@@ -198,7 +69,7 @@ int main(int argc, char **argv) {
 	shuffle(newstck.begin(), newstck.end(), dre);
 	for (val_tuple vt : newstck)
 	  stck.push(vt);
-	maxstack = max(maxstack, unsigned(stck.size()));
+	maxstack = max(maxstack, bigint(stck.size()));
 	break;
       }
     }
@@ -207,31 +78,11 @@ int main(int argc, char **argv) {
   if (solution) {
     cout << endl << "+++ YES +++" << endl;
     cout << "*** solution for values:" << endl;
-    for (unsigned int i = 0; i < p.k; ++i)
+    for (bigint i = 0; i < p.k; ++i)
       cout << "    x_" << i+1 << " = " << val[i] << endl;
   } else
     cout << endl << "+++ NO solution +++" << endl;
-  unsigned long long msize = memo.size();
-  cout << "*** memo size       = " << msize;
-  string km = "";
-  if (msize > 1024) {
-    msize /= 1024;
-    km = "K";
-  }
-  if (msize > 1024) {
-    msize /= 1024;
-    km = "M";
-  }
-  if (msize > 1024) {
-    msize /= 1024;
-    km = "G";
-  }
-  if (km.length() > 0)
-    cout << " (" << msize << km << ")";
-  cout << endl;
-  cout << "    max stack size  = " << maxstack << endl;
-  cout << "    # of splits     = " << split << endl;
-  cout << "    # of backtracks = " << nback << endl;
-  cout << "    doubles reached = " << dbl << endl;
+
+  statistics(memo.size(), "stack", maxstack, split, nback, dbl);
 }
 //////////////////////////////////////////////////////////////////////////////
