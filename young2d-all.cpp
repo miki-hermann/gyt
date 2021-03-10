@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <vector>
-#include <array>
 #include "gyt-common.hpp"
 
 using namespace std;

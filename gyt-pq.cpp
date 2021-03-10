@@ -3,16 +3,9 @@
 #include <queue>
 #include <set>
 #include "gyt-common.hpp"
+#include "gyt-pq-common.hpp"
 
 using namespace std;
-
-typedef pair<val_tuple, bigint> val_res;
-struct cmp_vr {
-  bool operator()(const val_res &vr1, const val_res &vr2)
-  {
-    return vr1.second >= vr2.second;
-  }
-};
 
 const string header    = "Priority-Driven Multidimensional Generalized Young Tableaux";
 const string underline = "===========================================================";
