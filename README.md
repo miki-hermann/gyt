@@ -1,2 +1,3 @@
-# gyt
-Read the paper maze.pdf
+# GYT: Generalized Young Tableaux
+
+Read the paper gyt.pdf for more information.
