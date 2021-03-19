@@ -10,7 +10,9 @@
 ## Brief description
 
 This is a set of C++ programs generalizing Young tableaux to higher
-dimensions. Read the paper `gyt.pdf` for more information.
+dimensions, designed for fast computation of of solutions for variadic
+polynomial equations `p(x_1, ..., x_n) = B` over non-negative
+integers. Read the paper `gyt.pdf` for more information.
 
 This distribution consists of the following C++ sources:
 
