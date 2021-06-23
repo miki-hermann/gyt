@@ -5,6 +5,8 @@
 
 using namespace std;
 
+bigint num_of_evals = 0;
+
 void read_input (polynomial &p, bigint &B) {
   cout << header << endl;
   cout << underline << endl;
@@ -70,6 +72,7 @@ T power(T x, bigint n) {
 }
 
 bigint eval(const polynomial &p, const val_tuple &val) {
+  num_of_evals++;
   bigint add = 0;
   for (bigint i = 0; i < p.coeffs.size(); ++i) {
     bigint mult = p.coeffs[i];
@@ -110,6 +113,10 @@ val_tuple get_bounds (const polynomial &p, const bigint &B) {
     bound[i] = val[i];
   }
 
+  for (bigint i = 0; i < bound.size(); ++i)
+    cerr << "*** bound[" << i+1 << "] = " << bound[i] << endl;
+  cerr << endl;
+
   return bound;
 }
 
@@ -140,4 +147,5 @@ void statistics (bigint msize,
   cout << "    # of splits     = " << split << endl;
   cout << "    # of backtracks = " << nback << endl;
   cout << "    doubles reached = " << dbl << endl;
+  cout << "    # of evals      = " << num_of_evals << endl;
 }

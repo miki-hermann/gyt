@@ -51,5 +51,6 @@ int main(int argc, char **argv) {
   } else
     cout << endl << "+++ NO solution +++" << endl;
   cout << "*** # of choices = " << choice << endl;
+  cout << "    # of evals   = " << num_of_evals << endl;
 }
 //////////////////////////////////////////////////////////////////////////////

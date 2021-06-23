@@ -6,6 +6,8 @@
 
 using namespace std;
 
+mpz_class num_of_evals = 0;
+
 void read_input (polynomial &p, mpz_class &B) {
   cout << header << endl;
   cout << underline << endl;
@@ -71,6 +73,7 @@ T power(T x, mpz_class n) {
 }
 
 mpz_class eval(const polynomial &p, const val_tuple &val) {
+  num_of_evals++;
   mpz_class add = 0;
   for (unsigned int i = 0; i < p.coeffs.size(); ++i) {
     mpz_class mult = p.coeffs[i];
@@ -143,4 +146,5 @@ void statistics (mpz_class msize,
   cout << "    # of splits     = " << split << endl;
   cout << "    # of backtracks = " << nback << endl;
   cout << "    doubles reached = " << dbl << endl;
+  cout << "    # of evals      = " << num_of_evals << endl;
 }

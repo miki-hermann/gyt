@@ -11,6 +11,7 @@ struct polynomial {
 
 extern const string header;
 extern const string underline;
+extern mpz_class num_of_evals;
 
 void read_input (polynomial &p, mpz_class &B);
 

@@ -12,6 +12,7 @@ struct polynomial {
 
 extern const string header;
 extern const string underline;
+extern bigint num_of_evals;
 
 void read_input (polynomial &p, bigint &B);
 
